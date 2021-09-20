@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Event } from './tab1/Event';
-// import { MyEvent } from './my-events/MyEvent';
+import { MyEvent } from './tab2/MyEvent';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventListService {
-//   private _myEvents: MyEvent[] = [];
+  private _myEvents: MyEvent[] = [];
   private _eventList: Event[] = [];
 
-//   myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
+  myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
   eventList: BehaviorSubject<Event[]> = new BehaviorSubject([]);
 
   constructor() {
@@ -18,11 +18,12 @@ export class EventListService {
 
   addEvent(event : Event){
     if(this.timeCheck(event)){
+      console.log(event)
       this._eventList.push(event);
       this.eventList.next(this._eventList);
       
-    //   this.addMyEvent(event);
-    //   this.myEvents.next(this._myEvents);
+      this.addMyEvent(event);
+      this.myEvents.next(this._myEvents);
       return null;
     }else{
      return "Ingrese fechas de inicio y fin Validas!";
@@ -36,7 +37,7 @@ export class EventListService {
     this.eventList.next(this._eventList);
   }
 
-  timeCheck(event){
+  timeCheck(event: Event){
     if(event.start >= event.end){
       return false
     }
@@ -49,25 +50,26 @@ export class EventListService {
     return true;
   }
 
-//   addMyEvent(event){
-//     let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-//     let value = {
-//       ui: event.ui,
-//       title: event.title,
-//       start: new Date(event.start).toLocaleDateString("es-ES", options),
-//       end: new Date(event.end).toLocaleDateString("es-ES", options),
-//       description: event.description
-//     }
-//     this._myEvents.push(value);
-//   }
+  addMyEvent(event: Event){
+    let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
+    let value = {
+      ui: event.ui,
+      title: event.title,
+      // start: new Date(event.start).toLocaleDateString("es-ES", options),
+      // end: new Date(event.end).toLocaleDateString("es-ES", options),
+      start: new Date(event.start).getFullYear().toLocaleString(),
+      end: new Date(event.end).getFullYear().toLocaleString(),
+    }
+    this._myEvents.push(value);
+  }
 
-  deleteEvent(ui){
-    // this._myEvents.map((event, index) =>{
-    //   if(event.ui == ui){
-    //     this._myEvents.splice(index, 1);
-    //   }
-    // });
-    // this.myEvents.next(this._myEvents);
+  deleteEvent(ui: Number){
+    this._myEvents.map((event, index) =>{
+      if(event.ui == ui){
+        this._myEvents.splice(index, 1);
+      }
+    });
+    this.myEvents.next(this._myEvents);
 
     this._eventList.map((event, index) =>{
       if(event.ui == ui){
@@ -77,7 +79,7 @@ export class EventListService {
     this.eventList.next(this._eventList);
   }
 
-//   getUi(){
-//     return this._myEvents.length;
-//   }
+  getUi(){
+    return this._myEvents.length;
+  }
 }

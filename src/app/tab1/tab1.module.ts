@@ -54,29 +54,25 @@ export class Tab1PageModule {
           ui: 0,
           title: "El Pepaaa",
           start: new Date('2020-10-24T10:00'),
-          end: new Date('2020-10-24T16:00'),
-          description: "ndeah"
+          end: new Date('2020-10-24T16:00')
         },
         {
           ui: 1,
           title: "El Pepe",
           start: new Date('2020-11-10T10:00'),
-          end: new Date('2020-11-10T16:00'),
-          description: ""
+          end: new Date('2020-11-10T16:00')
         },
         {
           ui: 2,
           title: "El Pepa",
           start: new Date('2020-10-10T10:00'),
-          end: new Date('2020-10-10T16:00'),
-          description: ""
+          end: new Date('2020-10-10T16:00')
         },
         {
           ui: 3,
           title: "El Pepa",
           start: new Date('2020-10-10T16:30'),
-          end: new Date('2020-10-10T17:00'),
-          description:"sape",
+          end: new Date('2020-10-10T17:00')
         }
       ] 
     );
