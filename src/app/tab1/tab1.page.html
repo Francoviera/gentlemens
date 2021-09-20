@@ -7,11 +7,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
-  </ion-header>
+  </ion-header> -->
+  <full-calendar 
+      deepChangeDetection="true"
+      [options]="calendarOptions"      
+  >
+  </full-calendar>
 
   <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>
