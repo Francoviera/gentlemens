@@ -6,13 +6,13 @@ import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { Event } from './Event';
 import { EventListService } from '../event-list.service';
-// import { FullCalendarModule } from "@fullcalendar/angular";
+import { FullCalendarModule } from "@fullcalendar/angular";
 
-// FullCalendarModule.registerPlugins([
-//   dayGridPlugin,
-//   interactionPlugin,
-//   timeGridPlugin
-// ]);
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  interactionPlugin,
+  timeGridPlugin
+]);
 
 
 import { Component, OnInit } from '@angular/core';
@@ -30,7 +30,7 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     FormsModule,
     ExploreContainerComponentModule,
     Tab1PageRoutingModule,
-    // FullCalendarModule
+    FullCalendarModule
   ],
   declarations: [Tab1Page]
 })
