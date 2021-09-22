@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { options } from 'preact';
 import { BehaviorSubject } from 'rxjs';
 import { Event } from './tab1/Event';
 import { MyEvent } from './tab2/MyEvent';
@@ -51,14 +52,11 @@ export class EventListService {
   }
 
   addMyEvent(event: Event){
-    let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
     let value = {
       ui: event.ui,
       title: event.title,
-      // start: new Date(event.start).toLocaleDateString("es-ES", options),
-      // end: new Date(event.end).toLocaleDateString("es-ES", options),
-      start: new Date(event.start).getFullYear().toLocaleString(),
-      end: new Date(event.end).getFullYear().toLocaleString(),
+      start: new Date(event.start).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
+      end: new Date(event.end).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
     }
     this._myEvents.push(value);
   }

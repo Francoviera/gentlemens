@@ -1,17 +1,24 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Mis Turnos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+<ion-content>
+  <ion-list *ngFor="let event of myEvents" class="list-group-item mis-turnos">
+    <ion-item>Titulo: {{event.title}}</ion-item>
+      <ion-item>
+          Inicio:<span class="text-success"> {{event.start}}</span>
+      </ion-item>
+    <ion-item>
+        Fin:<span class="text-danger"> {{event.end}}</span>
+    </ion-item>
+    <ion-item class="btns-abm">
+        <ion-button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></ion-button>
+        <ion-button class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></ion-button>
+        <ion-button class="btn btn-sm btn-danger" (click)="deleteEvent(event.ui)"><i class="far fa-trash-alt"></i></ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>

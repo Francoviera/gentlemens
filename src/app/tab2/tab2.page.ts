@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EventListService } from '../event-list.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +8,14 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  public myEvents: any = [];
 
+  constructor(private events: EventListService) {
+    events.myEvents.subscribe((observable) => this.myEvents = observable);
+
+  }
+
+  deleteEvent(ui){
+    this.events.deleteEvent(ui);
+  }
 }
