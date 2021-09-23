@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gentlemens-24535": {
+      "hosting": {
+        "app": [
+          "gentlemens-24535"
+        ]
+      }
+    }
+  }
+}
