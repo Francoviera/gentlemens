@@ -7,47 +7,39 @@ import { MyEvent } from './tab2/MyEvent';
 import {Turno} from './Turno'
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { UserData } from './UserData';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventListService {
-  private _myEvents: MyEvent[] = [];
-  private _eventList: Event[] = [];
-
-  items: Observable<Turno[]>;
-
-  private itemsCollection: AngularFirestoreCollection<Turno>;
-
-
+  private collectionTurno: AngularFirestoreCollection<Event>;
+  private collectionUser: AngularFirestoreCollection<UserData>;
 
   myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
   eventList: BehaviorSubject<Event[]> = new BehaviorSubject([]);
+  userList: BehaviorSubject<UserData[]> = new BehaviorSubject([]);
 
   constructor(private afs: AngularFirestore) {
-    this.itemsCollection = afs.collection<Turno>('turnos');
-    this.items = this.itemsCollection.valueChanges("turnos");
+    this.collectionTurno= afs.collection<Event>('Turnos');
+    this.collectionTurno.valueChanges().subscribe(turnos =>{this.eventList.next(turnos)});
 
-    console.log(this.items)
+    this.collectionUser= afs.collection<UserData>('Users');
+    this.collectionUser.valueChanges().subscribe(userList =>{this.userList.next(userList)});
+
   }
 
-  addEvent(event : Event){
+  addEvent(event : Event, email : string){
     if(this.timeCheck(event)){
       console.log(event)
-      this._eventList.push(event);
-      this.eventList.next(this._eventList);
-
-      let turno: Turno= {
-        "cliente": "viera",
-        "fecha": event.start
-      }
+      this.collectionTurno.add(event)
+      let array= this.eventList.getValue();
+      array.push(event);
+      this.eventList.next(array);
       
-      this.itemsCollection.add(turno);
-      console.log(this.itemsCollection.get());
-      
-      this.addMyEvent(event);
-      this.myEvents.next(this._myEvents);
+      this.addMyEvent(event, email);
+      // this.myEvents.next(this._myEvents);
       return null;
     }else{
      return "Ingrese fechas de inicio y fin Validas!";
@@ -56,9 +48,9 @@ export class EventListService {
 
   addEvents(events : Event[]){
     for (let event of events) {
-      this._eventList.push(event);
+      // this._eventList.push(event);
     }
-    this.eventList.next(this._eventList);
+    // this.eventList.next(this._eventList);
   }
 
   timeCheck(event: Event){
@@ -74,33 +66,40 @@ export class EventListService {
     return true;
   }
 
-  addMyEvent(event: Event){
+  addMyEvent(event: Event, email: string){
     let value = {
       ui: event.ui,
       title: event.title,
       start: new Date(event.start).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
       end: new Date(event.end).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
     }
-    this._myEvents.push(value);
+    let userDb= this.collectionUser.doc(email);
+    let array= [];
+    userDb.get().subscribe(user =>{
+      array= user.get("turnos")
+      array.push(value)
+      userDb.update({turnos: array})
+      this.myEvents.next(array);
+    });
   }
 
   deleteEvent(ui: Number){
-    this._myEvents.map((event, index) =>{
-      if(event.ui == ui){
-        this._myEvents.splice(index, 1);
-      }
-    });
-    this.myEvents.next(this._myEvents);
+    // this._myEvents.map((event, index) =>{
+    //   if(event.ui == ui){
+    //     this._myEvents.splice(index, 1);
+    //   }
+    // });
+    // this.myEvents.next(this._myEvents);
 
-    this._eventList.map((event, index) =>{
-      if(event.ui == ui){
-        this._eventList.splice(index, 1);
-      }
-    });
-    this.eventList.next(this._eventList);
+    // this._eventList.map((event, index) =>{
+    //   if(event.ui == ui){
+    //     this._eventList.splice(index, 1);
+    //   }
+    // });
+    // this.eventList.next(this._eventList);
   }
 
-  getUi(){
-    return this._myEvents.length;
+  getTurnos(){
+    return this.afs.collection("Turnos").valueChanges;
   }
 }
