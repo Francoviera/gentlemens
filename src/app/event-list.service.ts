@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { options } from 'preact';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Event } from './tab1/Event';
 import { MyEvent } from './tab2/MyEvent';
+
+import {Turno} from './Turno'
+
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +16,20 @@ export class EventListService {
   private _myEvents: MyEvent[] = [];
   private _eventList: Event[] = [];
 
+  items: Observable<Turno[]>;
+
+  private itemsCollection: AngularFirestoreCollection<Turno>;
+
+
+
   myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
   eventList: BehaviorSubject<Event[]> = new BehaviorSubject([]);
 
-  constructor() {
+  constructor(private afs: AngularFirestore) {
+    this.itemsCollection = afs.collection<Turno>('turnos');
+    this.items = this.itemsCollection.valueChanges("turnos");
+
+    console.log(this.items)
   }
 
   addEvent(event : Event){
@@ -22,6 +37,14 @@ export class EventListService {
       console.log(event)
       this._eventList.push(event);
       this.eventList.next(this._eventList);
+
+      let turno: Turno= {
+        "cliente": "viera",
+        "fecha": event.start
+      }
+      
+      this.itemsCollection.add(turno);
+      console.log(this.itemsCollection.get());
       
       this.addMyEvent(event);
       this.myEvents.next(this._myEvents);
