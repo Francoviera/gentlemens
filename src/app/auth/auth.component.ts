@@ -4,7 +4,6 @@ import { EventEmitter, Input, OnInit, Output } from '@angular/core';
 import firebase from 'firebase/compat/app';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
 
 
 @Component({
@@ -19,27 +18,26 @@ export class AuthComponent implements OnInit {
 
   public isLogin: Boolean;
   
-  public userData: Observable<firebase.User>;
-  
   constructor(private auth: AngularFireAuth) {
     this.isLogin= true;
     this.user= {
       email: "",
       password: "",
     }
-
-    this.userData= this.auth.authState;
+    // this.userData= this.auth.authState;
   }
   login() {
     if(this.user.email != "" && this.user.password != ""){
-      this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
-      .then(value => {
-        console.log(value);
-        console.log("userdata", this.auth.user)
-      })
-      .catch(err => {
-        console.log('Something went wrong: ', err.message);
-      });
+      // this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
+      // .then(value => {
+        // this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+           this.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
+        // });
+          // console.log("ee", this.userData);
+      // })
+      // .catch(err => {
+      //   console.log('Something went wrong: ', err.message);
+      // });
     }
   }
 

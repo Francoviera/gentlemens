@@ -1,5 +1,15 @@
 <ion-app>
-  <app-auth></app-auth>
-  <!-- <ion-router-outlet></ion-router-outlet> -->
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>
+        <h4 *ngIf="!isLogued">Ingresa</h4>
+        <ion-button (click)="logout()" *ngIf="isLogued">Cerrar Session</ion-button>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <app-auth *ngIf="!isLogued"></app-auth>
+    <ion-router-outlet *ngIf="isLogued"></ion-router-outlet>
+  </ion-content>
 
 </ion-app>
