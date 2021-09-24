@@ -4,27 +4,46 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Event } from './tab1/Event';
 import { MyEvent } from './tab2/MyEvent';
 
-import {Turno} from './Turno'
+import {Turnos} from './Turnos'
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { UserData } from './UserData';
+import { ArrayType } from '@angular/compiler';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventListService {
-  private collectionTurno: AngularFirestoreCollection<Event>;
+  private collectionTurno: AngularFirestoreCollection<Turnos>;
   private collectionUser: AngularFirestoreCollection<UserData>;
+
+  public eventListDb: Event[]= [];
 
   myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
   eventList: BehaviorSubject<Event[]> = new BehaviorSubject([]);
   userList: BehaviorSubject<UserData[]> = new BehaviorSubject([]);
 
-  constructor(private afs: AngularFirestore) {
-    this.collectionTurno= afs.collection<Event>('Turnos');
-    this.collectionTurno.valueChanges().subscribe(turnos =>{this.eventList.next(turnos)});
+  constructor(private afs: AngularFirestore){
+    this.collectionTurno= afs.collection<Turnos>('Turnos');
+    let date= new Date().getFullYear()+"/"+new Date().getMonth()+"/";
+    for (let i = 0; i < 30 ; i++) {
+      console.log("a")
+      let turnosDb= this.collectionTurno.doc(date+i);
+      turnosDb.get().subscribe(turnos =>{
+        let turnosList= turnos.get("turnos");
+        if(turnosList != undefined){
+          for(let turno of turnosList) {
+            this.eventListDb.push(turno);
+          }
+        }
+        if(i == 29){
+          this.addEvents();
+        }
+      })
 
+    }
+    // this.eventList.next(this.eventListDb);
     this.collectionUser= afs.collection<UserData>('Users');
     this.collectionUser.valueChanges().subscribe(userList =>{this.userList.next(userList)});
 
@@ -32,25 +51,36 @@ export class EventListService {
 
   addEvent(event : Event, email : string){
     if(this.timeCheck(event)){
-      console.log(event)
-      this.collectionTurno.add(event)
-      let array= this.eventList.getValue();
-      array.push(event);
-      this.eventList.next(array);
-      
+      let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
+      let turnosDb= this.collectionTurno.doc(date);
+      let arrayTurnos: Turnos= {
+        turnos: []
+      };
+      turnosDb.get().subscribe(turnos =>{
+        if(turnos.exists){
+          arrayTurnos.turnos= turnos.get("turnos");
+          arrayTurnos.turnos.push(event);
+          turnosDb.update({turnos: arrayTurnos.turnos})
+          this.eventList.next(arrayTurnos.turnos);
+        }else {
+          arrayTurnos.turnos.push(event);
+          this.collectionTurno.doc(date).set(arrayTurnos);
+        }
+      });
+
       this.addMyEvent(event, email);
-      // this.myEvents.next(this._myEvents);
       return null;
     }else{
      return "Ingrese fechas de inicio y fin Validas!";
     }
   }
 
-  addEvents(events : Event[]){
-    for (let event of events) {
-      // this._eventList.push(event);
-    }
-    // this.eventList.next(this._eventList);
+  addEvents(){
+    // for (let event of events) {
+    //   this.eventList.push(event);
+    // }
+    console.log(this.eventListDb)
+    this.eventList.next(this.eventListDb);
   }
 
   timeCheck(event: Event){
@@ -76,8 +106,10 @@ export class EventListService {
     let userDb= this.collectionUser.doc(email);
     let array= [];
     userDb.get().subscribe(user =>{
-      array= user.get("turnos")
-      array.push(value)
+      array= user.get("turnos");
+      console.log(array)
+      array.push(value);
+      console.log(user)
       userDb.update({turnos: array})
       this.myEvents.next(array);
     });
