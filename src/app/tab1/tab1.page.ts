@@ -29,8 +29,7 @@ export class Tab1Page implements OnInit {
 
   constructor(private events: EventListService, private afs: AngularFirestore) { 
 
-    events.eventList.subscribe((observable) => this.eventsDB = observable);
-    console.log("events",this.eventsDB)
+    // events.eventList.subscribe((observable) => this.eventsDB = observable);
     // events.myEvents.subscribe((observable) => this.myEvents = observable);
     this.lang= navigator.language;
     // events.addEvents(
@@ -106,7 +105,11 @@ export class Tab1Page implements OnInit {
   // }
 
   ngOnInit(): void {
-    console.log(this.lang);
+    // this.events.eventList.subscribe((observable) => {
+    //   console.log(observable);
+    // });
+    this.events.eventList.subscribe((observable) => this.eventsDB = observable);
+
   } 
 
 }

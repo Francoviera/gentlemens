@@ -8,8 +8,6 @@ import {Turnos} from './Turnos'
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { UserData } from './UserData';
-import { ArrayType } from '@angular/compiler';
-
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +32,8 @@ export class EventListService {
         let turnosList= turnos.get("turnos");
         if(turnosList != undefined){
           for(let turno of turnosList) {
+            turno.start= new Date(turno.start.toDate());
+            turno.end= new Date(turno.end.toDate());
             this.eventListDb.push(turno);
           }
         }
