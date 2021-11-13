@@ -34,6 +34,7 @@ export class EventListService {
           for(let turno of turnosList) {
             turno.start= new Date(turno.start.toDate());
             turno.end= new Date(turno.end.toDate());
+            turno.description= " ";
             this.eventListDb.push(turno);
           }
         }

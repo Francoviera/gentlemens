@@ -29,37 +29,15 @@ export class Tab1Page implements OnInit {
 
   constructor(private events: EventListService, private afs: AngularFirestore) { 
 
-    // events.eventList.subscribe((observable) => this.eventsDB = observable);
+    events.eventList.subscribe((observable) => {
+      this.eventsDB = observable
+      console.log(observable)
+    });
     // events.myEvents.subscribe((observable) => this.myEvents = observable);
     this.lang= navigator.language;
-    // events.addEvents(
-    //   [
-    //     {
-    //       ui: 0,
-    //       title: "El Pepaaa",
-    //       start: new Date('2020-10-24T10:00'),
-    //       end: new Date('2020-10-24T16:00')
-    //     },
-    //     {
-    //       ui: 1,
-    //       title: "El Pepe",
-    //       start: new Date('2020-11-10T10:00'),
-    //       end: new Date('2020-11-10T16:00')
-    //     },
-    //     {
-    //       ui: 2,
-    //       title: "El Pepa",
-    //       start: new Date('2020-10-10T10:00'),
-    //       end: new Date('2020-10-10T16:00')
-    //     },
-    //     {
-    //       ui: 3,
-    //       title: "El Pepa",
-    //       start: new Date('2020-10-10T16:30'),
-    //       end: new Date('2020-10-10T17:00')
-    //     }
-    //   ] 
-    // );
+    console.log(this.eventsDB)
+
+    
     this.calendarOptions= {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       // initialView: 'dayGridMonth', //Ver para que sirve
@@ -108,8 +86,9 @@ export class Tab1Page implements OnInit {
     // this.events.eventList.subscribe((observable) => {
     //   console.log(observable);
     // });
-    this.events.eventList.subscribe((observable) => this.eventsDB = observable);
-
+    this.events.eventList.subscribe((observable) =>{ 
+      this.calendarOptions.events= observable;
+    });
   } 
 
 }

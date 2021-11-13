@@ -16,7 +16,7 @@ export class Tab3Page {
   constructor(private events: EventListService) { 
     this.event= {
       ui: Date.now(),
-      title: '',
+      title: 'Corte de pelo',
       start: new Date(),
       end: new Date()
     }
