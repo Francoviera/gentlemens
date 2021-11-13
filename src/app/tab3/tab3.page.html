@@ -3,11 +3,11 @@
   <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
       <ion-item>
         <ion-label position="floating">Title</ion-label>
-        <ion-input type="text" class="form-control" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+        <ion-input type="text" class="form-control mt-2" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Inicio</ion-label>
-        <ion-input type="datetime-local" class="form-control" [(ngModel)]='event.start' name="start"  #dateStart='ngModel' placeholder="Fecha De Inicio" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+        <ion-input type="datetime-local" class="form-control mt-2" [(ngModel)]='event.start' name="start"  #dateStart='ngModel' placeholder="Fecha De Inicio" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
       </ion-item>
       <ion-item>
         <ion-button class="btn btn-success" type="submit">Agregar</ion-button>

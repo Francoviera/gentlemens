@@ -23,6 +23,9 @@ export class Tab1Page implements OnInit {
   
   private turnos: Turnos[];
 
+  public modalViewDay: boolean;
+
+
   public eventsDB: Event[];
   public showModal: boolean = false;
   public eventModal: Event;
@@ -33,14 +36,12 @@ export class Tab1Page implements OnInit {
       this.eventsDB = observable
       console.log(observable)
     });
-    // events.myEvents.subscribe((observable) => this.myEvents = observable);
     this.lang= navigator.language;
-    console.log(this.eventsDB)
-
+    this.modalViewDay= false;
     
     this.calendarOptions= {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      // initialView: 'dayGridMonth', //Ver para que sirve
+      initialView: 'dayGridMonth', //Ver para que sirve
       events: this.eventsDB,
       headerToolbar: {
         left: 'prev,next today',
@@ -50,11 +51,25 @@ export class Tab1Page implements OnInit {
       // themeSystem: 'Bostrap', // Investigar como cambiar el tema del Calendario
       // timeZone: 'UTC', Se adelante por unas horas
       locale: this.lang,
+      dateClick: (e) => {
+        console.log(new Date(e.date))
+        // this.modalViewDay= true;
+        // this.calendarOptions.initialView= "dayGridWeek";
+        e.view.calendar.changeView("timeGridDay");
+      },
+      navLinkDayClick: (e) => {
+        console.log(e)
+      },
       eventClick: (e) =>  {
+        let event : Event= {
+          ui: e.event._def.extendedProps.ui,
+          start: e.event.start,
+          end: e.event.end,
+          title: e.event.title
+        };
+        console.log(event);
+
         console.log(e); //Esto serviria para ir a otro Componente con detalles sobre el evento
-        this.showModal= !this.showModal;
-        let element = document.querySelector('.body');
-        element.classList.toggle("modal-open");
       },      
     }
   }
