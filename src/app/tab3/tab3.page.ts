@@ -26,7 +26,7 @@ export class Tab3Page {
     showError: EventEmitter<String> = new EventEmitter<String>();
 
   async addEvent(email: string){
-    this.event.end= new Date(new Date(this.event.start).setMinutes((new Date(this.event.start).getMinutes() + 45)));
+    this.event.end= new Date(new Date(this.event.start).setMinutes((new Date(this.event.start).getMinutes() + 40)));
     this.event.start= new Date(this.event.start);
     console.log(this.event)
     let result = this.events.addEvent(this.event, email);

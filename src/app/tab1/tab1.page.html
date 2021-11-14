@@ -10,32 +10,29 @@
     *ngIf="!modalViewDay"     
   >
   </full-calendar>
-  <ion-Content >
-    <ion-Modal isOpen="modalViewDay" >
-      <ion-button class="float-rigth mt-4 ml-3" type="button">Volver</ion-button>
-      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
+  <!-- <ion-content *ngIf="modalViewDay"     > -->
+    <!-- <ion-modal isOpen="modalViewDay" > -->
+      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')" *ngIf="modalViewDay">
+      <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary">Volver</ion-button>
         <ion-item>
           <ion-label position="floating">Title</ion-label>
-          <ion-input type="text" class="form-control mt-2" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+          <ion-input type="text" class="form-control mt-2" [value]="Franco" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
         </ion-item>
         <!-- <ion-item>
           <ion-label position="floating">Inicio</ion-label>
           <ion-input type="datetime-local" class="form-control mt-2" [(ngModel)]='event.start' name="start"  #dateStart='ngModel' placeholder="Fecha De Inicio" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
         </ion-item> -->
         <ion-item>
-          <ion-label>Hair Color</ion-label>
-          <ion-select value="brown" okText="Okay" cancelText="Dismiss">
-            <ion-select-option value="brown">Brown</ion-select-option>
-            <ion-select-option value="blonde">Blonde</ion-select-option>
-            <ion-select-option value="black">Black</ion-select-option>
-            <ion-select-option value="red">Red</ion-select-option>
+          <ion-label>Horarios Disponibles</ion-label>
+          <ion-select value="Seleccione" okText="Okay" cancelText="Dismiss" [(ngModel)]='horarioSelected' name="horarioSelected" #title='ngModel' required>
+            <ion-select-option *ngFor="let horario of horarios" [value]="horario">{{horario.hour}} : {{horario.minute}}</ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-item>
-          <ion-button type="submit">Agregar</ion-button>
-        </ion-item>
+        <!-- <ion-item> -->
+          <ion-button type="submit" color="success" class="mt-2 ml-4">Agregar Turno</ion-button>
+        <!-- </ion-item> -->
       </form>
-    </ion-Modal>
-  </ion-Content>
+    <!-- </ion-modal> -->
+  <!-- </ion-header> -->
 
 </ion-content>
