@@ -1,22 +1,22 @@
 
-<ion-content [fullscreen]="true">
   <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header> -->
   <full-calendar 
-    [options]="calendarOptions" 
-    *ngIf="!modalViewDay"     
+  [options]="calendarOptions" 
+  *ngIf="!modalViewDay"     
   >
-  </full-calendar>
+</full-calendar>
+<ion-content [fullscreen]="true"  *ngIf="modalViewDay"> 
   <!-- <ion-content *ngIf="modalViewDay"     > -->
     <!-- <ion-modal isOpen="modalViewDay" > -->
-      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')" *ngIf="modalViewDay">
-      <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary">Volver</ion-button>
+      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
+      <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary" (click)="hideModalViewDay()">Volver</ion-button>
         <ion-item>
           <ion-label position="floating">Title</ion-label>
-          <ion-input type="text" class="form-control mt-2" [value]="Franco" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+          <ion-input type="text" class="form-control mt-2" value="Franco" disabled [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
         </ion-item>
         <!-- <ion-item>
           <ion-label position="floating">Inicio</ion-label>

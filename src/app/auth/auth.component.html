@@ -19,15 +19,17 @@
 
 <ion-content [fullscreen]="true" *ngIf="!isLogin">
   <form class="form" #eventForm="ngForm" (ngSubmit)="register()">
-    <ion-item>
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" class="form-control" [(ngModel)]='user.name' name="title" #title='ngModel' aria-label="Username" aria-describedby="basic-addon1" required></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label position="floating">Email</ion-label>
         <ion-input type="text" class="form-control" [(ngModel)]='user.email' name="title" #title='ngModel' aria-label="Username" aria-describedby="basic-addon1" required></ion-input>
-
       </ion-item>
       <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
         <ion-input type="password" class="form-control" [(ngModel)]='user.password' name="start"  #dateStart='ngModel' aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
-
       </ion-item>
       <ion-item>
         <small (click)="changeModal()">tienes cuenta ? Inicia Session</small>

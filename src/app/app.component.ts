@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
+import Cookie from "js-cookie";
 
 
 
@@ -13,10 +14,13 @@ export class AppComponent {
 
   public isLogued: Boolean;
 
+
   constructor(private auth: AngularFireAuth) {
     this.isLogued= false;
     auth.authState.subscribe(user => {
       if(user){
+        console.log(user)
+        Cookie.set("user", user.displayName);
         this.isLogued= true;
       }else{
         this.isLogued= false;
@@ -26,5 +30,7 @@ export class AppComponent {
 
   logout(){
     this.auth.signOut();
+    Cookie.remove("user");
+
   }
 }

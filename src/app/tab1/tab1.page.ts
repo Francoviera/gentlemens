@@ -9,6 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Turnos } from '../Turnos';
 import { Horario } from './Horario';
+import Cookie from "js-cookie";
+
 
 @Component({
   selector: 'app-tab1',
@@ -37,6 +39,8 @@ export class Tab1Page implements OnInit {
 
   public horarioSelected: Horario;
 
+  public daySelected: Date;
+
   constructor(private events: EventListService, private afs: AngularFirestore) { 
     this.event= {
       ui: Date.now(),
@@ -44,8 +48,9 @@ export class Tab1Page implements OnInit {
       start: new Date(),
       end: new Date()
     }
-
-
+    if(Cookie.get("user") != undefined){
+      this.event.title= Cookie.get("user");
+    }
     events.eventList.subscribe((observable) => {
       this.eventsDB = observable
       console.log(observable)
@@ -55,7 +60,7 @@ export class Tab1Page implements OnInit {
     
     this.calendarOptions= {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      initialView: 'dayGridMonth', //Ver para que sirve
+      // initialView: 'dayGridMonth', //Ver para que sirve
       events: this.eventsDB,
       headerToolbar: {
         left: 'prev,next today',
@@ -70,6 +75,7 @@ export class Tab1Page implements OnInit {
 
         if(e.view.type === "timeGridDay"){
           this.modalViewDay= true;
+          this.daySelected= new Date(e.date);
           this.horarioSelected= {
             hour: new Date(e.date).getHours(),
             minute: new Date(e.date).getMinutes()
@@ -114,6 +120,10 @@ export class Tab1Page implements OnInit {
     })
 
     return status;
+  }
+
+  hideModalViewDay(){
+    this.modalViewDay= false;
   }
 
   laodHorarios(events: Event[]){
@@ -165,8 +175,27 @@ export class Tab1Page implements OnInit {
   //   });
   // }
 
-  addEvent(email: string){
-   console.log(this.horarioSelected);
+  async addEvent(email: string){
+    let start= new Date(this.daySelected);
+    start.setMinutes(this.horarioSelected.minute);
+    start.setHours(this.horarioSelected.hour);
+    this.event.start= start;
+    this.event.end= new Date(new Date(start).setMinutes((start.getMinutes() + 40)));
+    console.log(this.event)
+    let result = this.events.addEvent(this.event, email);
+    if(result === null){
+      this.event= {
+        ui: Date.now(),
+        title: '',
+        start: new Date(),
+        end: new Date()
+      }
+      this.eventsDB.push(this.event);
+    }else{
+      // this.showError.emit(result);
+      this.event.start= new Date();
+      this.event.end= new Date();
+    }
   }
 
   findTurnosByDay(date : Date){
