@@ -10,24 +10,32 @@
     *ngIf="!modalViewDay"     
   >
   </full-calendar>
-  <div class="modal" tabindex="-1" role="dialog" *ngElse>
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Modal body text goes here.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ion-Content >
+    <ion-Modal isOpen="modalViewDay" >
+      <ion-button class="float-rigth mt-4 ml-3" type="button">Volver</ion-button>
+      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input type="text" class="form-control mt-2" [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+        </ion-item>
+        <!-- <ion-item>
+          <ion-label position="floating">Inicio</ion-label>
+          <ion-input type="datetime-local" class="form-control mt-2" [(ngModel)]='event.start' name="start"  #dateStart='ngModel' placeholder="Fecha De Inicio" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
+        </ion-item> -->
+        <ion-item>
+          <ion-label>Hair Color</ion-label>
+          <ion-select value="brown" okText="Okay" cancelText="Dismiss">
+            <ion-select-option value="brown">Brown</ion-select-option>
+            <ion-select-option value="blonde">Blonde</ion-select-option>
+            <ion-select-option value="black">Black</ion-select-option>
+            <ion-select-option value="red">Red</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button type="submit">Agregar</ion-button>
+        </ion-item>
+      </form>
+    </ion-Modal>
+  </ion-Content>
 
 </ion-content>

@@ -30,8 +30,16 @@ export class Tab1Page implements OnInit {
   public showModal: boolean = false;
   public eventModal: Event;
 
-  constructor(private events: EventListService, private afs: AngularFirestore) { 
+  public event: Event;
 
+
+  constructor(private events: EventListService, private afs: AngularFirestore) { 
+    this.event= {
+      ui: Date.now(),
+      title: '',
+      start: new Date(),
+      end: new Date()
+    }
     events.eventList.subscribe((observable) => {
       this.eventsDB = observable
       console.log(observable)
@@ -53,12 +61,17 @@ export class Tab1Page implements OnInit {
       locale: this.lang,
       dateClick: (e) => {
         console.log(new Date(e.date))
-        // this.modalViewDay= true;
         // this.calendarOptions.initialView= "dayGridWeek";
-        e.view.calendar.changeView("timeGridDay");
+        if(e.view.type === "timeGridDay"){
+          this.modalViewDay= true;
+          console.log(this.modalViewDay)
+        }else{
+          e.view.calendar.changeView("timeGridDay");
+        }
+        console.log(e.view)
       },
       navLinkDayClick: (e) => {
-        console.log(e)
+        console.log("click", e)
       },
       eventClick: (e) =>  {
         let event : Event= {
