@@ -52,27 +52,39 @@ export class EventListService {
     this.loadMyEvents();
   }
 
-  addEvent(event : Event, email : string){
-    if(this.timeCheck(event)){
-      let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
-      let turnosDb= this.collectionTurno.doc(date);
-      let arrayTurnos: Turnos= {
-        turnos: []
-      };
-      turnosDb.get().subscribe(turnos =>{
-        if(turnos.exists){
-          arrayTurnos.turnos= turnos.get("turnos");
-          arrayTurnos.turnos.push(event);
-          turnosDb.update({turnos: arrayTurnos.turnos})
-          this.eventList.next(arrayTurnos.turnos);
-        }else {
-          arrayTurnos.turnos.push(event);
-          this.collectionTurno.doc(date).set(arrayTurnos);
-        }
-      });
+  // verifyExistEventPending(event: Event){
+  //   let array : MyEvent[]= this.myEvents;
 
-      this.addMyEvent(event, email);
-      return null;
+  //   if(array[array.length-1].valueOf)
+  // }
+  
+  addEvent(event : Event){
+    if(this.timeCheck(event)){
+      this.addMyEvent(event, Cookie.get("userEmail"));
+      //si el turno se pudo agregar se agrega a la lista de turnos
+      // if(verifyExistEventPending(event)){
+        let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
+        let turnosDb= this.collectionTurno.doc(date);
+        let arrayTurnos: Turnos= {
+          turnos: []
+        };
+        turnosDb.get().subscribe(turnos =>{
+          if(turnos.exists){
+
+            arrayTurnos.turnos= turnos.get("turnos");
+            arrayTurnos.turnos.push(event);
+            turnosDb.update({turnos: arrayTurnos.turnos})
+            this.eventList.next(arrayTurnos.turnos);
+          }else {
+            arrayTurnos.turnos.push(event);
+            this.collectionTurno.doc(date).set(arrayTurnos);
+          }
+        });
+
+        return null;
+      // }else{
+      //   return "Ya posees un Turno";
+      // }
     }else{
      return "Ingrese fechas de inicio y fin Validas!";
     }

@@ -159,13 +159,13 @@ export class Tab1Page implements OnInit {
     alert(value);
   }
 
-  async addEvent(email: string){
+  async addEvent(){
     let start= new Date(this.daySelected);
     start.setMinutes(this.horarioSelected.minute);
     start.setHours(this.horarioSelected.hour);
     this.event.start= start;
     this.event.end= new Date(new Date(start).setMinutes((start.getMinutes() + 40)));
-    let result = this.events.addEvent(this.event, email);
+    let result = this.events.addEvent(this.event);
     if(result === null){
       this.event= {
         ui: Date.now(),
@@ -173,11 +173,12 @@ export class Tab1Page implements OnInit {
         start: new Date(),
         end: new Date()
       }
-      this.eventsDB.push(this.event);
+      this.modalViewDayNew= false;
     }else{
       // this.showError.emit(result);
       this.event.start= new Date();
       this.event.end= new Date();
+      alert("Ocurrio un error");
     }
   }
 

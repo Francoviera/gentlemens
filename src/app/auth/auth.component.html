@@ -2,7 +2,7 @@
   <form class="form" #eventForm="ngForm" (ngSubmit)="login()">
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-        <ion-input type="text" class="form-control" [(ngModel)]='user.email' name="title" #title='ngModel' aria-label="Username" aria-describedby="basic-addon1" required></ion-input>
+        <ion-input type="email" class="form-control" [(ngModel)]='user.email' name="title" #title='ngModel' aria-label="Username" aria-describedby="basic-addon1" required></ion-input>
 
       </ion-item>
       <ion-item>
@@ -11,8 +11,8 @@
 
       </ion-item>
       <ion-item>
-        <small (click)="changeModal()">No tienes cuenta ? Registrate</small>
-        <ion-button type="submit">login</ion-button>
+        <small (click)="changeModal()">No tienes cuenta ? <span class="text-primary">Registrate</span></small>
+        <ion-button type="submit" class="ml-2">login</ion-button>
       </ion-item>
   </form>
 </ion-content>
@@ -32,8 +32,8 @@
         <ion-input type="password" class="form-control" [(ngModel)]='user.password' name="start"  #dateStart='ngModel' aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
       </ion-item>
       <ion-item>
-        <small (click)="changeModal()">tienes cuenta ? Inicia Session</small>
-        <ion-button type="submit">Registrame</ion-button>
+        <small (click)="changeModal()">tienes cuenta ? <span class="text-primary">Inicia Session</span></small>
+        <ion-button type="submit" class="ml-2">Registrame</ion-button>
       </ion-item>
   </form>
 </ion-content>

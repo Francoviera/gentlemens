@@ -29,16 +29,20 @@ export class AuthComponent implements OnInit {
   }
   login() {
     if(this.user.email != "" && this.user.password != "" ){
-      // this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
-      // .then(value => {
-        // this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-           this.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
+      if(this.user.email.includes("@")){
+        // this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
+        // .then(value => {
+          // this.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+            this.auth.signInWithEmailAndPassword(this.user.email, this.user.password);
+          // });
+            // console.log("ee", this.userData);
+        // })
+        // .catch(err => {
+        //   console.log('Something went wrong: ', err.message);
         // });
-          // console.log("ee", this.userData);
-      // })
-      // .catch(err => {
-      //   console.log('Something went wrong: ', err.message);
-      // });
+      }else{
+        alert("Ingrese un email valido!")
+      }
     }else{
       alert("Complete todos los campos");
     }
@@ -46,16 +50,20 @@ export class AuthComponent implements OnInit {
 
   register() {
     if(this.user.email != "" && this.user.password != "" && this.user.name != ""){
-      this.auth.createUserWithEmailAndPassword(this.user.email, this.user.password)
-        .then(user => {
-          console.log(user);
-          this.auth.authState.subscribe(data => {
+      if(this.user.email.includes("@")){
+        this.auth.createUserWithEmailAndPassword(this.user.email, this.user.password)
+          .then(user => {
+            console.log(user);
+            this.auth.authState.subscribe(data => {
 
-            data.updateProfile({
-              displayName: this.user.name,
+              data.updateProfile({
+                displayName: this.user.name,
+              })
             })
           })
-        })
+        }else{
+          alert("Ingrese un email valido!")
+        }
       }else{
           alert("Complete todos los campos");
       }

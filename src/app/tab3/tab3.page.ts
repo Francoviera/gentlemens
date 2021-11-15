@@ -29,7 +29,7 @@ export class Tab3Page {
     this.event.end= new Date(new Date(this.event.start).setMinutes((new Date(this.event.start).getMinutes() + 40)));
     this.event.start= new Date(this.event.start);
     console.log(this.event)
-    let result = this.events.addEvent(this.event, email);
+    let result = this.events.addEvent(this.event);
     if(result === null){
       this.event= {
         ui: Date.now(),

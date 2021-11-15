@@ -5,7 +5,7 @@
   >
 </full-calendar>
 <ion-content [fullscreen]="true"  *ngIf="modalViewDayNew"> 
-    <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
+    <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent()">
       <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary" (click)="hideModalViewDay()">Volver</ion-button>
         <ion-item>
           <ion-label position="floating">Title</ion-label>
