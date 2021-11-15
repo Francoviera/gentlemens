@@ -26,19 +26,23 @@ export class Tab1Page implements OnInit {
   
   private turnos: Turnos[];
 
-  public modalViewDay: boolean;
-
-
+  //Events Lists by DB
   public eventsDB: Event[];
-  public showModal: boolean = false;
-  public eventModal: Event;
-
+  //Event modal
   public event: Event;
+  //Event Detail view
+  public eventDetail: Event;
 
-  public horarios: Horario[] = []; 
 
+  //Booleans Views
+  public modalViewDayNew: boolean;
+  public modalViewDayDetail: boolean;
+
+  //Horarios availables of day selected
+  public hours: Horario[] = []; 
+  //Input Horario of Form new Event
   public horarioSelected: Horario;
-
+  //day selected in calendar
   public daySelected: Date;
 
   constructor(private events: EventListService, private afs: AngularFirestore) { 
@@ -53,10 +57,10 @@ export class Tab1Page implements OnInit {
     }
     events.eventList.subscribe((observable) => {
       this.eventsDB = observable
-      console.log(observable)
     });
     this.lang= navigator.language;
-    this.modalViewDay= false;
+    this.modalViewDayNew= false;
+    this.modalViewDayDetail= false;
     
     this.calendarOptions= {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -71,10 +75,8 @@ export class Tab1Page implements OnInit {
       // timeZone: 'UTC', Se adelante por unas horas
       locale: this.lang,
       dateClick: (e) => {
-        console.log(new Date(e.date))
-
         if(e.view.type === "timeGridDay"){
-          this.modalViewDay= true;
+          this.modalViewDayNew= true;
           this.daySelected= new Date(e.date);
           this.horarioSelected= {
             hour: new Date(e.date).getHours(),
@@ -90,10 +92,6 @@ export class Tab1Page implements OnInit {
           this.calendarOptions.slotMaxTime= "22:00:00";
 
         }
-        console.log(e.view)
-      },
-      navLinkDayClick: (e) => {
-        console.log("click", e)
       },
       eventClick: (e) =>  {
         let event : Event= {
@@ -102,11 +100,14 @@ export class Tab1Page implements OnInit {
           end: e.event.end,
           title: e.event.title
         };
-        console.log(event);
-
-        console.log(e); //Esto serviria para ir a otro Componente con detalles sobre el evento
+        this.eventDetail= event;
+        this.modalViewDayDetail= true;
       },      
     }
+  }
+
+  changeDateToStringFormat(date: Date){
+    return new Date(date).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
   }
 
 
@@ -123,11 +124,14 @@ export class Tab1Page implements OnInit {
   }
 
   hideModalViewDay(){
-    this.modalViewDay= false;
+    this.modalViewDayNew= false;
+  }
+  hideModalViewDetail(){
+    this.modalViewDayDetail= false;
   }
 
   laodHorarios(events: Event[]){
-    this.horarios= [];
+    this.hours= [];
     let minute= 0;
     let hour= 15;
     while (hour != 22){
@@ -136,7 +140,7 @@ export class Tab1Page implements OnInit {
             hour: hour,
             minute: minute
           }
-          this.horarios.push(horario);
+          this.hours.push(horario);
         }
         if(minute === 0){ 
           minute= 40;
@@ -149,31 +153,11 @@ export class Tab1Page implements OnInit {
         }
       
     }
-    console.log(this.horarios)
   }
 
   showError(value : String){
     alert(value);
   }
-
-  hideModal(){
-    this.showModal= false;
-    let element = document.querySelector('.body');
-    element.classList.toggle("modal-open");
-  }
-
-  //Ver como implementar el Hover para ver la description del evento
-  viewDetail(item){
-    console.log(item);
-  }
-  // viewDetail(info) {
-  //   var tooltip = new Tooltip(info.el, {
-  //     title: info.event.extendedProps.description,
-  //     placement: 'top',
-  //     trigger: 'hover',
-  //     container: 'body'
-  //   });
-  // }
 
   async addEvent(email: string){
     let start= new Date(this.daySelected);
@@ -181,7 +165,6 @@ export class Tab1Page implements OnInit {
     start.setHours(this.horarioSelected.hour);
     this.event.start= start;
     this.event.end= new Date(new Date(start).setMinutes((start.getMinutes() + 40)));
-    console.log(this.event)
     let result = this.events.addEvent(this.event, email);
     if(result === null){
       this.event= {
@@ -214,7 +197,6 @@ export class Tab1Page implements OnInit {
     this.events.eventList.subscribe((observable) =>{ 
       this.calendarOptions.events= observable;
     });
-    console.log(this.horarioSelected)
 
   } 
 

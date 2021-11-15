@@ -116,20 +116,44 @@ export class EventListService {
     });
   }
 
-  deleteEvent(ui: Number){
-    // this._myEvents.map((event, index) =>{
-    //   if(event.ui == ui){
-    //     this._myEvents.splice(index, 1);
-    //   }
-    // });
-    // this.myEvents.next(this._myEvents);
+  deleteEvent(event: Event, email: string){
+    let userDb= this.collectionUser.doc(email);
+    let array= [];
+    console.log(userDb)
+    userDb.get().subscribe(user =>{
+      array= user.get("turnos");
+      console.log(array)
+      console.log(user)
+      // array.map((turno, index) => {
+      //   if(turno.ui === event.ui){
+      //     arrayTurnos.turnos.splice(index, 1);
+      //     return null;
+      //   }
+      // });
+      // userDb.update({turnos: array})
+      // this.myEvents.next(array);
+    });
 
-    // this._eventList.map((event, index) =>{
-    //   if(event.ui == ui){
-    //     this._eventList.splice(index, 1);
-    //   }
+    let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
+      let turnosDb= this.collectionTurno.doc(date);
+      let arrayTurnos: Turnos= {
+        turnos: []
+      };
+      // turnosDb.get().subscribe(turnos =>{
+      //   if(turnos.exists){
+      //     arrayTurnos.turnos= turnos.get("turnos");
+      //     arrayTurnos.turnos.map((turno, index) => {
+      //       if(turno.ui === event.ui){
+      //         arrayTurnos.turnos.splice(index, 1);
+      //         return null;
+      //       }
+      //     });
+      //     turnosDb.update({turnos: arrayTurnos.turnos})
+      //     this.eventList.next(arrayTurnos.turnos);
+      //   }else {
+      //     alert("Error al Borrar");
+      //   }
     // });
-    // this.eventList.next(this._eventList);
   }
 
   getTurnos(){

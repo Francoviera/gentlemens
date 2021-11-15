@@ -1,38 +1,43 @@
 
-  <!-- <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header> -->
-  <full-calendar 
+<full-calendar 
   [options]="calendarOptions" 
-  *ngIf="!modalViewDay"     
+  *ngIf="!modalViewDayNew && !modalViewDayDetail"     
   >
 </full-calendar>
-<ion-content [fullscreen]="true"  *ngIf="modalViewDay"> 
-  <!-- <ion-content *ngIf="modalViewDay"     > -->
-    <!-- <ion-modal isOpen="modalViewDay" > -->
-      <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
+<ion-content [fullscreen]="true"  *ngIf="modalViewDayNew"> 
+    <form class="form" #eventForm="ngForm" (ngSubmit)="addEvent('vierafranco1@gmail.com')">
       <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary" (click)="hideModalViewDay()">Volver</ion-button>
         <ion-item>
           <ion-label position="floating">Title</ion-label>
           <ion-input type="text" class="form-control mt-2" value="Franco" disabled [(ngModel)]='event.title' name="title"  #title='ngModel' placeholder="Cliente" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
         </ion-item>
-        <!-- <ion-item>
-          <ion-label position="floating">Inicio</ion-label>
-          <ion-input type="datetime-local" class="form-control mt-2" [(ngModel)]='event.start' name="start"  #dateStart='ngModel' placeholder="Fecha De Inicio" aria-label="DateStart" aria-describedby="basic-addon1" required></ion-input>
-        </ion-item> -->
         <ion-item>
           <ion-label>Horarios Disponibles</ion-label>
           <ion-select value="Seleccione" okText="Okay" cancelText="Dismiss" [(ngModel)]='horarioSelected' name="horarioSelected" #title='ngModel' required>
-            <ion-select-option *ngFor="let horario of horarios" [value]="horario">{{horario.hour}} : {{horario.minute}}</ion-select-option>
+            <ion-select-option *ngFor="let horario of hours" [value]="horario">{{horario.hour}} : {{horario.minute}}</ion-select-option>
           </ion-select>
         </ion-item>
-        <!-- <ion-item> -->
           <ion-button type="submit" color="success" class="mt-2 ml-4">Agregar Turno</ion-button>
-        <!-- </ion-item> -->
-      </form>
-    <!-- </ion-modal> -->
-  <!-- </ion-header> -->
-
+    </form>
+</ion-content>
+<ion-content [fullscreen]="true"  *ngIf="modalViewDayDetail"> 
+  <ion-button class="float-rigth mt-2 ml-2" type="button" color="primary" (click)="hideModalViewDetail()">Volver</ion-button>
+    <ion-card>
+      <ion-card-header>
+        <ion-title>
+          Detalles del turno
+        </ion-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">{{eventDetail.title}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <p>Desde: {{changeDateToStringFormat(eventDetail.start)}}</p>
+        </ion-item>
+        <ion-item>
+          <p>Hasta: {{changeDateToStringFormat(eventDetail.end)}}</p>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
 </ion-content>

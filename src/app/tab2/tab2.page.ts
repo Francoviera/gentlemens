@@ -10,12 +10,24 @@ export class Tab2Page {
 
   public myEvents: any = [];
 
+  public eventDetail: Event;
+
+  public modalViewCancelEvent: boolean;
+
   constructor(private events: EventListService) {
     events.myEvents.subscribe((observable) => this.myEvents = observable);
 
   }
 
-  deleteEvent(ui){
-    this.events.deleteEvent(ui);
+  cangeModalCancelEvent(event: Event){
+    this.modalViewCancelEvent= !this.modalViewCancelEvent;
+    this.eventDetail= event;
   }
+
+
+  cancelEvent(event: Event){
+    // this.events.deleteEvent(event, "flecha@gmail.com");
+    // this.cangeModalCancelEvent();
+  }
+
 }

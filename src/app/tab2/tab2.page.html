@@ -11,7 +11,24 @@
     <ion-item class="btns-abm">
         <ion-button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></ion-button>
         <ion-button class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></ion-button>
-        <ion-button class="btn btn-sm btn-danger" (click)="deleteEvent(event.ui)"><i class="far fa-trash-alt"></i></ion-button>
+        <ion-button class="btn btn-sm btn-danger" (click)="cangeModalCancelEvent(event)"><i class="far fa-trash-alt"></i></ion-button>
     </ion-item>
   </ion-list>
+</ion-content>
+<ion-content *ngIf="modalViewCancelEvent">
+  <ion-card >
+    <ion-card-header>
+      <ion-title>
+        Detalles del turno
+      </ion-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Estas Seguro de cancelar el Turno?</ion-label>
+      </ion-item>
+      <ion-item>
+        <!-- <ion-button color="danger" class="mr-3" (click)="cancelEvent(eventDetail)">Si</ion-button><ion-button color="dark" (click)="cangeModalCancelEvent()">No</ion-button> -->
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
