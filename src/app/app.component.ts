@@ -21,6 +21,8 @@ export class AppComponent {
       if(user){
         console.log(user)
         Cookie.set("user", user.displayName);
+        Cookie.set("userEmail", user.email);
+
         this.isLogued= true;
       }else{
         this.isLogued= false;
@@ -31,6 +33,7 @@ export class AppComponent {
   logout(){
     this.auth.signOut();
     Cookie.remove("user");
+    Cookie.remove("userEmail");
 
   }
 }

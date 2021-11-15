@@ -8,6 +8,8 @@ import {Turnos} from './Turnos'
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { UserData } from './UserData';
+import Cookie from "js-cookie";
+
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +49,7 @@ export class EventListService {
     // this.eventList.next(this.eventListDb);
     this.collectionUser= afs.collection<UserData>('Users');
     this.collectionUser.valueChanges().subscribe(userList =>{this.userList.next(userList)});
-
+    this.loadMyEvents();
   }
 
   addEvent(event : Event, email : string){
@@ -97,12 +99,24 @@ export class EventListService {
     return true;
   }
 
+  loadMyEvents(){
+    let userDb= this.collectionUser.doc(Cookie.get("userEmail"));
+    let array= [];
+    userDb.get().subscribe(user =>{
+      array= user.get("turnos");
+      console.log(array)
+      console.log(user)
+      // userDb.update({turnos: array})
+      this.myEvents.next(array);
+    });
+  }
+
   addMyEvent(event: Event, email: string){
     let value = {
       ui: event.ui,
       title: event.title,
-      start: new Date(event.start).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
-      end: new Date(event.end).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}),
+      start: event.start,
+      end: event.end,
     }
     let userDb= this.collectionUser.doc(email);
     let array= [];
@@ -116,8 +130,8 @@ export class EventListService {
     });
   }
 
-  deleteEvent(event: Event, email: string){
-    let userDb= this.collectionUser.doc(email);
+  deleteEvent(event: Event){
+    let userDb= this.collectionUser.doc(Cookie.get("userEmail"));
     let array= [];
     console.log(userDb)
     userDb.get().subscribe(user =>{

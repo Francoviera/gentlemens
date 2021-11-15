@@ -1,33 +1,28 @@
 
-<ion-content>
+<ion-content  *ngIf="!modalViewCancelEvent">
   <ion-list *ngFor="let event of myEvents" class="list-group-item mis-turnos">
-    <ion-item>Titulo: {{event.title}}</ion-item>
+    <ion-item>{{event.title}}</ion-item>
       <ion-item>
-          Inicio:<span class="text-success"> {{event.start}}</span>
+          Desde: <span class="text-success"> {{changeDateToStringFormat(event.start)}}</span>
       </ion-item>
     <ion-item>
-        Fin:<span class="text-danger"> {{event.end}}</span>
+        Hasta :<span class="text-danger"> {{changeDateToStringFormat(event.end)}}</span>
     </ion-item>
     <ion-item class="btns-abm">
-        <ion-button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></ion-button>
-        <ion-button class="btn btn-sm btn-warning"><i class="fas fa-pencil-alt"></i></ion-button>
-        <ion-button class="btn btn-sm btn-danger" (click)="cangeModalCancelEvent(event)"><i class="far fa-trash-alt"></i></ion-button>
+        <!-- <ion-button color="primary"><i class="fas fa-eye"></i></ion-button> -->
+        <!-- <ion-button color="warning"><i class="fas fa-pencil-alt"></i></ion-button> -->
+        <ion-button color="danger" (click)="cangeModalCancelEvent(event)" *ngIf="verifyAvalibleDateToCancel(event.start)">Cancelar</ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
-<ion-content *ngIf="modalViewCancelEvent">
+<ion-content *ngIf="modalViewCancelEvent" class="mt-3">
   <ion-card >
-    <ion-card-header>
-      <ion-title>
-        Detalles del turno
-      </ion-title>
-    </ion-card-header>
-    <ion-card-content>
+    <ion-card-content class="mt-5">
       <ion-item>
-        <ion-label>Estas Seguro de cancelar el Turno?</ion-label>
+        <p>Estas Seguro de cancelar el Turno ?</p>
       </ion-item>
       <ion-item>
-        <!-- <ion-button color="danger" class="mr-3" (click)="cancelEvent(eventDetail)">Si</ion-button><ion-button color="dark" (click)="cangeModalCancelEvent()">No</ion-button> -->
+        <ion-button color="danger" class="ml-3 mr-3" (click)="cancelEvent(eventDetail)">Si</ion-button><ion-button color="dark" (click)="cangeModalCancelEvent(null)">No</ion-button>
       </ion-item>
     </ion-card-content>
   </ion-card>

@@ -15,19 +15,33 @@ export class Tab2Page {
   public modalViewCancelEvent: boolean;
 
   constructor(private events: EventListService) {
-    events.myEvents.subscribe((observable) => this.myEvents = observable);
+    events.myEvents.subscribe((observable) =>{
+       this.myEvents = observable;
+       console.log(observable)
+    });
 
   }
 
   cangeModalCancelEvent(event: Event){
     this.modalViewCancelEvent= !this.modalViewCancelEvent;
-    this.eventDetail= event;
+    if(event != null)
+      this.eventDetail= event;
   }
 
 
-  cancelEvent(event: Event){
-    // this.events.deleteEvent(event, "flecha@gmail.com");
-    // this.cangeModalCancelEvent();
+  cancelEvent(event){
+    this.events.deleteEvent(event);
+    this.cangeModalCancelEvent(null);
+  }
+
+  changeDateToStringFormat(date: Date){
+    return date;
+    // return new Date(date).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
+  }
+
+  verifyAvalibleDateToCancel(date: Date){
+    // console.log(date)
+    // return date.valueOf() < Date.now();
   }
 
 }
