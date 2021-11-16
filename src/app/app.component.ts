@@ -14,6 +14,8 @@ export class AppComponent {
 
   public isLogued: Boolean;
 
+  public user: string= Cookie.get("user");
+
 
   constructor(private auth: AngularFireAuth) {
     this.isLogued= false;

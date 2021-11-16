@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-title>
         <h4 *ngIf="!isLogued">Ingresa</h4>
-        <ion-icon name="power-outline" (click)="logout()" *ngIf="isLogued"></ion-icon>
+        <ion-icon class="float-left mt-3" name="power-outline" (click)="logout()" *ngIf="isLogued"></ion-icon> <p *ngIf="isLogued" class="float-rigth text-primary ml-2 mt-3">{{user}}</p>
       </ion-title>
     </ion-toolbar>
   </ion-header>

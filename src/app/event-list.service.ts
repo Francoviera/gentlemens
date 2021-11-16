@@ -20,7 +20,10 @@ export class EventListService {
 
   public eventListDb: Event[]= [];
 
-  myEvents: BehaviorSubject<MyEvent[]> = new BehaviorSubject([]);
+  public myEventsDb: Event[]= [];
+
+
+  myEvents: BehaviorSubject<Event[]> = new BehaviorSubject([]);
   eventList: BehaviorSubject<Event[]> = new BehaviorSubject([]);
   userList: BehaviorSubject<UserData[]> = new BehaviorSubject([]);
 
@@ -51,18 +54,23 @@ export class EventListService {
     this.collectionUser.valueChanges().subscribe(userList =>{this.userList.next(userList)});
     this.loadMyEvents();
   }
-
-  // verifyExistEventPending(event: Event){
-  //   let array : MyEvent[]= this.myEvents;
-
-  //   if(array[array.length-1].valueOf)
-  // }
+  
+  verifyExistEventPending(event: Event){
+    // let array : Event[]= this.myEventsDb;
+    // console.log(array)
+    // console.log(array[array.length-1].start <= event.start);
+    // if(array == undefined){
+    //   return true;
+    // }
+    return true;
+  }
   
   addEvent(event : Event){
     if(this.timeCheck(event)){
       this.addMyEvent(event, Cookie.get("userEmail"));
-      //si el turno se pudo agregar se agrega a la lista de turnos
-      // if(verifyExistEventPending(event)){
+      // si el turno se pudo agregar se agrega a la lista de turnos
+      // this.verifyExistEventPending(event);
+      if(this.verifyExistEventPending(event)){
         let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
         let turnosDb= this.collectionTurno.doc(date);
         let arrayTurnos: Turnos= {
@@ -82,9 +90,9 @@ export class EventListService {
         });
 
         return null;
-      // }else{
-      //   return "Ya posees un Turno";
-      // }
+      }else{
+        return "Ya posees un Turno";
+      }
     }else{
      return "Ingrese fechas de inicio y fin Validas!";
     }
@@ -110,15 +118,23 @@ export class EventListService {
 
     return true;
   }
-
   loadMyEvents(){
+    console.log(Cookie.get("userEmail"))
     let userDb= this.collectionUser.doc(Cookie.get("userEmail"));
+    console.log(userDb)
+
     let array= [];
     userDb.get().subscribe(user =>{
       array= user.get("turnos");
-      console.log(array)
       console.log(user)
+      array.map(item => {
+        let eventValue= item;
+        item.start= eventValue.start.toDate();
+        item.end= eventValue.end.toDate();
+      });
       // userDb.update({turnos: array})
+      console.log(array)
+
       this.myEvents.next(array);
     });
   }
@@ -134,52 +150,72 @@ export class EventListService {
     let array= [];
     userDb.get().subscribe(user =>{
       array= user.get("turnos");
-      console.log(array)
-      array.push(value);
-      console.log(user)
-      userDb.update({turnos: array})
+      
+      if(array === undefined){
+        array= [];
+        array.push(value);
+        this.collectionUser.doc(Cookie.get("userEmail")).set({
+          turnos: array
+        })
+
+      }else{
+        array.push(value);
+        console.log(user)
+        userDb.update({turnos: array})
+      }
       this.myEvents.next(array);
     });
   }
 
   deleteEvent(event: Event){
+    // debugger;
     let userDb= this.collectionUser.doc(Cookie.get("userEmail"));
-    let array= [];
-    console.log(userDb)
-    userDb.get().subscribe(user =>{
-      array= user.get("turnos");
-      console.log(array)
-      console.log(user)
-      // array.map((turno, index) => {
-      //   if(turno.ui === event.ui){
-      //     arrayTurnos.turnos.splice(index, 1);
-      //     return null;
-      //   }
-      // });
-      // userDb.update({turnos: array})
-      // this.myEvents.next(array);
-    });
+    // let array= [];
+    // console.log(userDb)
+    // userDb.get().subscribe(user =>{
+    //   array= user.get(Cookie.get("userEmail"));
+    //   console.log(array)
+    //   console.log(user)
+    //   array.map((turno, index) => {
+    //     if(turno.ui === event.ui){
+    //       array.splice(index, 1);
+    //       return null;
+    //     }
+    //   });
+    //   userDb.update({turnos: array})
+    //   this.myEvents.next(array);
+    // });
 
     let date= new Date(event.start).getFullYear()+"/"+new Date(event.start).getMonth()+"/"+new Date(event.start).getDate();
       let turnosDb= this.collectionTurno.doc(date);
-      let arrayTurnos: Turnos= {
-        turnos: []
-      };
-      // turnosDb.get().subscribe(turnos =>{
-      //   if(turnos.exists){
-      //     arrayTurnos.turnos= turnos.get("turnos");
-      //     arrayTurnos.turnos.map((turno, index) => {
-      //       if(turno.ui === event.ui){
-      //         arrayTurnos.turnos.splice(index, 1);
-      //         return null;
-      //       }
-      //     });
-      //     turnosDb.update({turnos: arrayTurnos.turnos})
-      //     this.eventList.next(arrayTurnos.turnos);
-      //   }else {
-      //     alert("Error al Borrar");
-      //   }
-    // });
+      let arrayTurnos = []; 
+      turnosDb.get().subscribe(turnos =>{
+        if(turnos.exists){
+          console.log(turnos)
+          console.log(turnos.get("turnos"))
+          arrayTurnos= turnos.get("turnos");
+            arrayTurnos.map((turno, index) => {
+              if(turno.ui === event.ui){
+                arrayTurnos.splice(index, 1);
+                return null;
+              }
+            });
+          console.log(arrayTurnos)
+          
+        }else {
+          alert("Error al Borrar");
+        }
+    });
+    let values= this.myEvents.getValue();
+    console.log(values)
+    values.map((turno, index) => {
+      if(turno.ui === event.ui){
+        values.splice(index, 1);
+        return null;
+      }
+    });
+    userDb.update({turnos: values})
+    this.eventList.next(values);
   }
 
   getTurnos(){

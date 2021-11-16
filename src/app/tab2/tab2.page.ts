@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { EventListService } from '../event-list.service';
+import { Event } from '../tab1/Event';
+
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +10,7 @@ import { EventListService } from '../event-list.service';
 })
 export class Tab2Page {
 
-  public myEvents: any = [];
+  public myEvents: Event[];
 
   public eventDetail: Event;
 
@@ -30,18 +32,18 @@ export class Tab2Page {
 
 
   cancelEvent(event){
+    //que se puede cancelar 2 horas antes
     this.events.deleteEvent(event);
     this.cangeModalCancelEvent(null);
   }
 
   changeDateToStringFormat(date: Date){
-    return date;
-    // return new Date(date).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
+    return new Date(date).toLocaleDateString("es-ES", { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'})
   }
 
   verifyAvalibleDateToCancel(date: Date){
-    // console.log(date)
-    // return date.valueOf() < Date.now();
+    let dateNow= new Date(Date.now());
+    return date.getFullYear() === dateNow.getFullYear() && date.getMonth() === dateNow.getMonth() && date.getDate() >= dateNow.getDate();
   }
 
 }

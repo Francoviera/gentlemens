@@ -78,6 +78,7 @@ export class Tab1Page implements OnInit {
         if(e.view.type === "timeGridDay"){
           this.modalViewDayNew= true;
           this.daySelected= new Date(e.date);
+          //dia de semana hasta las 9 y finde hasta las 22
           this.horarioSelected= {
             hour: new Date(e.date).getHours(),
             minute: new Date(e.date).getMinutes()
