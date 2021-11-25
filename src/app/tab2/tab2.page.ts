@@ -18,8 +18,9 @@ export class Tab2Page {
 
   constructor(private events: EventListService) {
     events.myEvents.subscribe((observable) =>{
-       this.myEvents = observable;
-       console.log(observable)
+      let array= observable;
+      // array.sort((a, b) => a.start > b.start)
+       this.myEvents = array;
     });
 
   }

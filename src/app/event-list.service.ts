@@ -106,15 +106,32 @@ export class EventListService {
     this.eventList.next(this.eventListDb);
   }
 
-  timeCheck(event: Event){
+  // Función para calcular los días transcurridos entre dos fechas
+  restaFechas = function(f1 : Date,f2: Date){
+    let fechaInicio = f1.getTime();
+    let fechaFin    = f2.getTime();
+    
+    let dif = fechaFin - fechaInicio;
+
+    let dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+
+    return dias;
+  }
+
+  async timeCheck(event: Event){
+    debugger;
     if(event.start >= event.end){
-      return false
+      return false;
+    }else if(new Date(event.start) < new Date(Date.now())){
+      return false;
+    } 
+
+    for (let e of this.myEventsDb) {
+      let result= this.restaFechas(new Date(e.start), new Date(event.start));
+        
+      if(e.start > event.start || result < 7)
+        return false;
     }
-    // for (let e of this.eventsDB) {
-    //   if(this.event.start >= e.start && this.event.start <= e.start){
-    //     console.log(e);
-    //   }
-    // }
 
     return true;
   }
@@ -136,6 +153,7 @@ export class EventListService {
       console.log(array)
 
       this.myEvents.next(array);
+      this.myEventsDb= array;
     });
   }
 
